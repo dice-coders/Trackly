@@ -1,3 +1,4 @@
+
 from sqlalchemy import delete
 import database
 import models.goal_model as model
@@ -8,6 +9,9 @@ def create_goal(goal: model.Goal, db = database.get_db):
     db.refresh(goal)
     return goal
 
+def get_goal_by_id(id: int, db = database.get_bd) :
+    return db.get(model.Goal, id)
+  
 def update_goal(goal: model.Goal, id: int, db = database.get_bd):
     old_goal = db.get(model.Goal,id)
     new_goal: model.Goal
@@ -24,3 +28,12 @@ def update_goal(goal: model.Goal, id: int, db = database.get_bd):
     db.commit()
     db.refresh(new_goal)
     return new_goal
+
+
+
+def delete_goal(id: int, db = database.get_bd) :
+    db.execute(delete(model.Goal).where(model.Goal.id == id))
+    db.commit()
+    
+    
+    
