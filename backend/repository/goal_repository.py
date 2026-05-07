@@ -10,6 +10,7 @@ def get_goal_by_id(id: int, db = database.get_bd) :
 
 def delete_goal(id: int, db = database.get_bd) :
     db.execute(delete(model.Goal).where(model.Goal.id == id))
+    db.commit()
     
     
     
