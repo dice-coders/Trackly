@@ -9,7 +9,7 @@ def create_goal(goal: model.Goal, db = database.get_db):
     db.refresh(goal)
     return goal
 
-def get_goal_by_id(id: int, db = database.get_bd) :
+def get_goal_by_id(id: int, db = database.get_bd):
     return db.get(model.Goal, id)
   
 def update_goal(goal: model.Goal, id: int, db = database.get_bd):
@@ -17,7 +17,6 @@ def update_goal(goal: model.Goal, id: int, db = database.get_bd):
 
     for field in ["title", "description", "state"]:
         value = getattr(goal, field)
-
         if value is not None:
             setattr(old_goal, field, value)
 
