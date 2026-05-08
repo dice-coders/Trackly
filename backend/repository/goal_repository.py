@@ -12,7 +12,7 @@ def create_goal(goal: model.Goal, db = database.get_db):
 def get_goal_by_id(id: int, db = database.get_bd) :
     return db.get(model.Goal, id)
   
-def update_goal(goal: model.Goal, id: int, db = database.get_bd):
+def update_goal(goal: model.Goal, db = database.get_bd):
     old_goal = db.get(model.Goal,id)
 
     for field in ["title", "description", "state"]:

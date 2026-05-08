@@ -1,5 +1,6 @@
 from ..schemas import goal_schemas as s
 from ..models import goal_model as model
+from ..repository import goal_repository as repo
 def create_goal() :
     pass
 def get_goal_id() :
@@ -11,6 +12,11 @@ def update_goal() :
 def delete_goal() :
     pass
 
+def substituir_valores_da_antiga_meta(id: int, data: s.GoalResponse) -> model.Goal:
+    goal = repo.get_goal_by_id(id)
+    new_data = goal_response_to_model(data)
+    goal = new_data
+    return goal
 
 def goal_create_to_model(schema: s.GoalCreate) -> model.Goal:
     goal = model.Goal(
@@ -36,8 +42,10 @@ def goal_update_to_model(schema: s.GoalUpdate) -> model.Goal:
     )
     return goal
 
-def object_not_null() :
-    pass
+def object_not_null(goal: model.Goal) :
+    if goal is not None :
+        return goal
+    #raise a global exception handler
 
 def attributes_not_null() :
     pass
