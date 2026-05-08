@@ -20,10 +20,12 @@ def update_goal(goal: model.Goal, id: int, db = database.get_bd):
         if value is not None:
             setattr(old_goal, field, value)
 
+def update_goal(goal: model.Goal, db = database.get_bd):
+    db.add(goal)
     db.commit()
-    db.refresh(old_goal)
+    db.refresh(goal)
 
-    return old_goal
+    return goal
 
 def delete_goal(id: int, db = database.get_bd) :
     db.execute(delete(model.Goal).where(model.Goal.id == id))
