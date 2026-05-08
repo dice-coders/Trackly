@@ -28,8 +28,13 @@ def goal_response_to_model(schema: s.GoalResponse) -> model.Goal:
     )
     return goal
 
-def goal_update_to_model() :
-    pass
+def goal_update_to_model(schema: s.GoalUpdate) -> model.Goal:
+    goal = model.Goal(
+        title = schema.title,
+        description = schema.description,
+        state = schema.state
+    )
+    return goal
 
 def object_not_null() :
     pass
