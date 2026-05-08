@@ -20,8 +20,13 @@ def goal_create_to_model(schema: s.GoalCreate) -> model.Goal:
     )
     return goal
 
-def goal_response_to_model() :
-    pass
+def goal_response_to_model(schema: s.GoalResponse) -> model.Goal:
+    goal = model.Goal(
+        title = schema.title,
+        description = schema.description,
+        state = schema.state
+    )
+    return goal
 
 def goal_update_to_model() :
     pass
