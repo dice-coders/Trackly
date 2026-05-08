@@ -14,22 +14,17 @@ def get_goal_by_id(id: int, db = database.get_bd) :
   
 def update_goal(goal: model.Goal, id: int, db = database.get_bd):
     old_goal = db.get(model.Goal,id)
-    new_goal: model.Goal
 
-    if not goal.title:
-        new_goal.title = goal.title
+    for field in ["title", "description", "state"]:
+        value = getattr(goal, field)
 
-    if not goal.description:
-        new_goal.description = goal.description
-
-    if not goal.state:
-        new_goal.state = goal.state
+        if value is not None:
+            setattr(old_goal, field, value)
 
     db.commit()
-    db.refresh(new_goal)
-    return new_goal
+    db.refresh(old_goal)
 
-
+    return old_goal
 
 def delete_goal(id: int, db = database.get_bd) :
     db.execute(delete(model.Goal).where(model.Goal.id == id))
