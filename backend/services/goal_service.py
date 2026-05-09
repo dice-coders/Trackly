@@ -72,3 +72,7 @@ def object_not_null(goal: model.Goal) :
     if goal is not None :
         return goal
     #raise a global exception handler
+
+def id_checker(id: int) :
+    if id is not None :
+        return id
