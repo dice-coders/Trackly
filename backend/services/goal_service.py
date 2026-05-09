@@ -3,16 +3,23 @@ from ..models import goal_model as model
 from ..repository import goal_repository as repo
 
 def get_goal(id: int) -> model.Goal:
+    id_cheker(id)
     goal = repo.get_goal_by_id(id)
     return goal
 
 def update_goal(id: int, schema: s.GoalUpdate) -> model.Goal:
+    id_cheker(id)
     goal = goal_update_to_model(schema)
     updated = repo.update_goal(goal, id)
     return updated
 
 def delete_goal(id: int) -> None:
+    id_cheker(id)
     repo.delete_goal(id)
+
+def id_cheker(id: int):
+    if id is None:
+        return id
 
 def create_goal() :
     pass
