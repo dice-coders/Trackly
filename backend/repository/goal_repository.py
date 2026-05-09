@@ -1,4 +1,3 @@
-
 from sqlalchemy import delete, select
 from database import get_db
 from models.goal_model import Goal
