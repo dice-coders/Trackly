@@ -15,7 +15,7 @@ def get_goal(id: int) -> model.Goal:
     return goal
 
 def get_all_goals():
-    pass
+    return repo.get_all_goals()
 
 def update_goal(id: int, schema: schemas.GoalUpdate) -> model.Goal:
     if id_checker(id) :
