@@ -1,6 +1,19 @@
 from ..schemas import goal_schemas as s
 from ..models import goal_model as model
 from ..repository import goal_repository as repo
+
+def get_goal(id: int) -> model.Goal:
+    goal = repo.get_goal_by_id(id)
+    return goal
+
+def update_goal(id: int, schema: s.GoalUpdate) -> model.Goal:
+    goal = goal_update_to_model(schema)
+    updated = repo.update_goal(goal, id)
+    return updated
+
+def delete_goal(id: int) -> None:
+    repo.delete_goal(id)
+
 def create_goal() :
     pass
 def get_goal_id() :
