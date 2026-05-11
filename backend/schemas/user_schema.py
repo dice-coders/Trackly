@@ -5,7 +5,7 @@ class UserBase(BaseModel) :
     name: str = Field(max_length=120)
     email: EmailStr = Field(max_length=120)
     number: str = Field(min_length=11, max_length=11)
-    addres: str
+    address: str
     role: Literal["ADM"]
 
 class UserCreate(UserBase) :
