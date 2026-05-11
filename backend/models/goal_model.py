@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Text
 
-import database as db
+from database import Base
 
-class Goal(db.Base) :
+class Goal(Base) :
     __tablename__ = "goals"
     
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

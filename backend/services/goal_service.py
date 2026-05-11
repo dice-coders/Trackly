@@ -1,68 +1,78 @@
-from ..schemas import goal_schemas as schemas
-from ..models import goal_model as model
-from ..repository import goal_repository as repo
+from repository.goal_repository import (
+    create_goal as repo_create_goal,
+    get_goal_by_id as repo_get_goal_by_id,
+    get_all_goals as repo_get_all_goals,
+    update_goal as repo_update_goal,
+    delete_goal as repo_delete_goal,
+    Session
+)
+from schemas.goal_schemas import (GoalCreate, GoalResponse, GoalUpdate)
+from models.goal_model import Goal
 
 
-def create_goal(schema: schemas.GoalUpdate) -> model.Goal:
+
+
+def create_goal(schema: GoalCreate, db: Session) -> Goal:
     goal = goal_create_to_model(schema)
-    repo.create_goal(goal)
+    
+    return repo_create_goal(goal, db)
+
+def get_goal(id: int, db: Session) -> Goal:
+    id_checker(id)
+        
+    goal = repo_get_goal_by_id(id, db)
     return goal
 
-def get_goal(id: int) -> model.Goal:
-    if id_checker(id) :
-        raise None
-    goal = repo.get_goal_by_id(id)
-    return goal
+def get_all_goals(db: Session):
+    goals = repo_get_all_goals(db)
+    return [GoalResponse.model_validate(g) for g in goals]
 
-def get_all_goals():
-    pass
-
-def update_goal(id: int, schema: schemas.GoalUpdate) -> model.Goal:
-    if id_checker(id) :
-        raise None
+def update_goal(id: int, schema: GoalUpdate, db: Session) -> Goal:
+    id_checker(id)
+        
     goal = goal_update_to_model(schema)
-    updated = repo.update_goal(goal, id)
+    updated = repo_update_goal(goal, db)
     return updated
 
-def delete_goal(id: int) -> None:
-    if id_checker(id) :
-        raise None
-    repo.delete_goal(id)
+def delete_goal(id: int, db: Session):
+    id_checker(id)
+        
+    repo_delete_goal(id, db)
 
 
 
-def goal_create_to_model(schema: schemas.GoalCreate) -> model.Goal:
-    goal = model.Goal(
+def goal_create_to_model(schema: GoalCreate) -> Goal:
+    goal = Goal(
         title = schema.title,
         description = schema.description,
         state = schema.state
     )
     return goal
 
-def goal_response_to_model(schema: schemas.GoalResponse) -> model.Goal:
-    goal = model.Goal(
+def goal_response_to_model(schema: GoalResponse) -> Goal:
+    goal = Goal(
         title = schema.title,
         description = schema.description,
         state = schema.state
     )
     return goal
 
-def goal_update_to_model(schema: schemas.GoalUpdate) -> model.Goal:
-    goal = model.Goal(
+def goal_update_to_model(schema: GoalUpdate) -> Goal:
+    goal = Goal(
         title = schema.title,
         description = schema.description,
         state = schema.state
     )
     return goal
 
-def object_not_null(goal: model.Goal) :
+def object_not_null(goal: Goal) :
     if goal is not None :
         return goal
     #raise a global exception handler
 
-def field_not_none_validate(id: int, data: schemas.GoalResponse) -> model.Goal:
+def field_not_none_validate(id: int, data: GoalResponse, db: Session) -> Goal:
     
-    goal = repo.get_goal_by_id(id)
+    goal = repo_get_goal_by_id(id, db)
     new_data = goal_response_to_model(data)
     
     for field in ["title", "description", "state"]:
