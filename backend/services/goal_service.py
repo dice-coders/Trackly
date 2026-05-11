@@ -1,36 +1,43 @@
 from repository.goal_repository import (
-    create_goal, get_goal_by_id, get_all_goals, update_goal, delete_goal
+    create_goal as repo_create_goal,
+    get_goal_by_id as repo_get_goal_by_id,
+    get_all_goals as repo_get_all_goals,
+    update_goal as repo_update_goal,
+    delete_goal as repo_delete_goal,
+    Session
 )
 from schemas.goal_schemas import (GoalCreate, GoalResponse, GoalUpdate)
 from models.goal_model import Goal
 
 
 
-def create_goal(schema: GoalCreate) -> Goal:
+
+def create_goal(schema: GoalCreate, db: Session) -> Goal:
     goal = goal_create_to_model(schema)
-    create_goal(goal)
+    
+    return repo_create_goal(goal, db)
+
+def get_goal(id: int, db: Session) -> Goal:
+    id_checker(id)
+        
+    goal = repo_get_goal_by_id(id, db)
     return goal
 
-def get_goal(id: int) -> Goal:
-    if id_checker(id) :
-        raise None
-    goal = get_goal_by_id(id)
-    return goal
+def get_all_goals(db: Session):
+    goals = repo_get_all_goals(db)
+    return [GoalResponse.model_validate(g) for g in goals]
 
-def get_all_goals():
-    return get_all_goals()
-
-def update_goal(id: int, schema: GoalUpdate) -> Goal:
-    if id_checker(id) :
-        raise None
+def update_goal(id: int, schema: GoalUpdate, db: Session) -> Goal:
+    id_checker(id)
+        
     goal = goal_update_to_model(schema)
-    updated = update_goal(goal, id)
+    updated = repo_update_goal(goal, db)
     return updated
 
-def delete_goal(id: int) -> None:
-    if id_checker(id) :
-        raise None
-    delete_goal(id)
+def delete_goal(id: int, db: Session):
+    id_checker(id)
+        
+    repo_delete_goal(id, db)
 
 
 
@@ -63,9 +70,9 @@ def object_not_null(goal: Goal) :
         return goal
     #raise a global exception handler
 
-def field_not_none_validate(id: int, data: GoalResponse) -> Goal:
+def field_not_none_validate(id: int, data: GoalResponse, db: Session) -> Goal:
     
-    goal = get_goal_by_id(id)
+    goal = repo_get_goal_by_id(id, db)
     new_data = goal_response_to_model(data)
     
     for field in ["title", "description", "state"]:
