@@ -8,19 +8,20 @@ from schemas.user_schema import (UserCreate, UserResponse, UserUpdate)
 from models.user_model import User
 from database import Session
 from typing import List
+#Ajustar a injeção de dependencia amanhã
 class UserService :
     def __init__(self, db: Session) :
         self.db = db
         
         
-    def create_user(self, schema: UserCreate) -> User :
+    def save_user(self, schema: UserCreate) -> User :
         user = self.parse_user_create(schema)
         return repo_create_user(user)
     
-    def get_user_by_id(self, id: int) -> User :
+    def get_user(self, id: int) -> User :
         return repo_get_user_by_id(id)
     
-    def get_all_users(self) -> List[User] :
+    def list_user(self) -> List[User] :
         return repo_get_all_users()
     
     def update_user(self, schema: UserUpdate) -> User :
