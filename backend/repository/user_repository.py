@@ -2,23 +2,27 @@ from sqlalchemy import select
 from models.user_model import User
 from database import Session
 from typing import List
-def create_user(user: User, db: Session) -> User:
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
+class UserRepository :
+    def __init__(self, db: Session) :
+        self.db = db
     
-def get_user_by_id(id: int, db: Session) -> User:
-    return db.get(User, id)
+    def create_user(self, user: User) -> User:
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
+        
+    def get_user_by_id(self, id: int) -> User:
+        return self.db.get(User, id)
 
-def get_all_users(db: Session) -> List[User]:
-    return db.scalars(select(User)).all()
+    def get_all_users(self) -> List[User]:
+        return self.db.scalars(select(User)).all()
 
-def update_users(user: User, db: Session) :
-    db_user = db.get(User, user.id)
-    #Fazer lógica de atualização depois
-    return db_user
+    def update_users(self, user: User) :
+        db_user = self.db.get(User, user.id)
+        #Fazer lógica de atualização depois
+        return db_user
 
-def delete_user(id: int, db: Session) :
-    db.delete(User).where(User.id == id)
-    
+    def delete_user(self, id: int) :
+        self.db.delete(User).where(User.id == id)
+        
