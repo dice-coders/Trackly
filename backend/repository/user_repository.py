@@ -22,8 +22,8 @@ class UserRepository :
     def update_users(self, user: User) -> User:
         updated = self.db.merge(user)
         self.db.commit()
-        self.db.refresh(update)
-        return update
+        self.db.refresh(updated)
+        return updated
 
     def delete_user(self, id: int) -> None:
         self.db.delete(User).where(User.id == id)

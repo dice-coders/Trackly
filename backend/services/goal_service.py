@@ -21,7 +21,7 @@ class GoalService :
 
     def update_goal(self, id: int, schema: GoalUpdate) -> Goal:
         self.id_checker(id)
-            
+            #Implementar validação de atributos nulos
         goal = self.goal_update_to_model(id, schema)
         updated = self.repo.update_goal(goal)
         return updated

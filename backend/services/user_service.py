@@ -16,7 +16,7 @@ class UserService :
         return self.repo.get_user_by_id(id)
     
     def list_user(self) -> List[User] :
-        return self.repo.get_all_users()
+        return self.repo.list_user()
     
     def update_user(self,id: int, schema: UserUpdate) -> User :
         return self.field_not_none_validate(id, schema)
@@ -35,13 +35,14 @@ class UserService :
             #hash
         )
         return user
-    def parse_user_update(self, schema: UserUpdate) -> User :
+    def parse_user_update(self,id: int, schema: UserUpdate) -> User :
         user = User(
             name = schema.name,
             email = schema.email,
             number = schema.number,
             address = schema.address,
             role = schema.role,
+            id = id
             #hash
         )
         return user
@@ -59,7 +60,7 @@ class UserService :
     def field_not_none_validate(self, id: int, schema: UserResponse) -> User:
         
         user = self.repo.get_goal_by_id(id)
-        new_data = self.parse_user_response(schema)
+        new_data = self.parse_user_response(id, schema)
         
         for field in ["name", "email", "number", "address", "role"]:
             value = getattr(new_data, field)
