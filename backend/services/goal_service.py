@@ -1,8 +1,8 @@
 from repository.goal_repository import GoalRepository
-
 from schemas.goal_schemas import (GoalCreate, GoalUpdate, GoalResponse)
 from models.goal_model import Goal
 from typing import List
+
 class GoalService :
     def __init__(self, repo: GoalRepository) :
         self.repo = repo
@@ -22,7 +22,7 @@ class GoalService :
     def update_goal(self, id: int, schema: GoalUpdate) -> Goal:
         self.id_checker(id)
             
-        goal = self.goal_update_to_model(schema)
+        goal = self.goal_update_to_model(id, schema)
         updated = self.repo.update_goal(goal)
         return updated
 
@@ -48,11 +48,12 @@ class GoalService :
         )
         return goal
 
-    def goal_update_to_model(self, schema: GoalUpdate) -> Goal:
+    def goal_update_to_model(self, id: int, schema: GoalUpdate) -> Goal:
         goal = Goal(
             title = schema.title,
             description = schema.description,
-            state = schema.state
+            state = schema.state,
+            id = id
         )
         return goal
 

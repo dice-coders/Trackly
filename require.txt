@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────
 #  REQUIREMENTS — Sistema Web Python
-#  Instalar com: pip install -r requirements.txt
+#  Instalar com: pip install -r require.txt
 # ─────────────────────────────────────────
 
 # ── Backend principal ──

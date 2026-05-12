@@ -1,4 +1,3 @@
-from dependencies import get_db
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 from models.goal_model import Goal
@@ -16,7 +15,7 @@ class GoalRepository :
     def get_goal(self, id: int) -> Goal :
         return self.db.get(Goal, id)
 
-    def list_goals(self, db: Session) -> List[Goal] :
+    def list_goals(self) -> List[Goal] :
         return self.db.scalars(select(Goal)).all()
 
     def update_goal(self, goal: Goal) -> Goal :
