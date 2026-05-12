@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from models.user_model import User
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from typing import List
 class UserRepository :
@@ -12,17 +13,18 @@ class UserRepository :
         self.db.refresh(user)
         return user
         
-    def get_user_by_id(self, id: int) -> User:
+    def get_user(self, id: int) -> User:
         return self.db.get(User, id)
 
-    def get_all_users(self) -> List[User]:
+    def list_user(self) -> List[User]:
         return self.db.scalars(select(User)).all()
 
-    def update_users(self, user: User) :
-        db_user = self.db.get(User, user.id)
-        #Fazer lógica de atualização depois
-        return db_user
+    def update_users(self, user: User) -> User:
+        updated = self.db.merge(user)
+        self.db.commit()
+        self.db.refresh(update)
+        return update
 
-    def delete_user(self, id: int) :
+    def delete_user(self, id: int) -> None:
         self.db.delete(User).where(User.id == id)
         
