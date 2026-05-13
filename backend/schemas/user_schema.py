@@ -7,7 +7,8 @@ class UserBase(BaseModel) :
     number: str = Field(min_length=11, max_length=11)
     address: str
     role: Literal["ADM"]
-
+    
+    
 class UserCreate(UserBase) :
     password: str
     model_config = ConfigDict(from_attributes=True)

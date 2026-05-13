@@ -1,35 +1,28 @@
-from repository.user_repository import (create_user as repo_create_user,
-                                        get_user_by_id as repo_get_user_by_id,
-                                        get_all_users as repo_get_all_users,
-                                        update_users as repo_update_users,
-                                        delete_user as repo_delete_user
-                                        )
+from repository.user_repository import UserRepository
 from schemas.user_schema import (UserCreate, UserResponse, UserUpdate)
 from models.user_model import User
-from database import Session
+from passlib.hash import sha256_crypt
 from typing import List
 #Ajustar a injeção de dependencia amanhã
 class UserService :
-    def __init__(self, db: Session) :
-        self.db = db
-        
-        
+    def __init__(self, repo: UserRepository) :
+        self.repo = repo        
+       
     def save_user(self, schema: UserCreate) -> User :
         user = self.parse_user_create(schema)
-        return repo_create_user(user)
+        return self.repo.create_user(user)
     
     def get_user(self, id: int) -> User :
-        return repo_get_user_by_id(id)
+        return self.repo.get_user(id)
     
     def list_user(self) -> List[User] :
-        return repo_get_all_users()
+        return self.repo.list_user()
     
-    def update_user(self, schema: UserUpdate) -> User :
-        user = self.parse_user_update(schema)
-        return repo_update_users(user)
+    def update_user(self,id: int, schema: UserUpdate) -> User :
+        return self.field_not_none_validate(id, schema)
     
     def delete_user(self, id: int) -> None :
-        repo_delete_user(id)
+        return self.repo.delete_user(id)
 
 
     def parse_user_create(self, schema: UserCreate) -> User :
@@ -39,16 +32,17 @@ class UserService :
             number = schema.number,
             address = schema.address,
             role = schema.role,
-            #hash
+            hash = self.hashing(schema.password)
         )
         return user
-    def parse_user_update(self, schema: UserUpdate) -> User :
+    def parse_user_update(self,id: int, schema: UserUpdate) -> User :
         user = User(
             name = schema.name,
             email = schema.email,
             number = schema.number,
             address = schema.address,
             role = schema.role,
+            id = id
             #hash
         )
         return user
@@ -63,9 +57,20 @@ class UserService :
         )
         return user
     
-    #Até então só se aplicam no Update
-    def is_not_null(self) -> bool:
-        pass #Faça depois
+    def field_not_none_validate(self, id: int, schema: UserResponse) -> User:
+        
+        user = self.repo.get_user(id)
+        new_data = self.parse_user_response(schema)
+        
+        for field in ["name", "email", "number", "address", "role"]:
+            value = getattr(new_data, field)
+
+            if value is not None:
+                setattr(user, field, value)
+        return user
     
-    def attribute_is_not_null() -> bool:
-        pass #Faça depois
+    def hashing(self, password: str) -> str:
+        return sha256_crypt.using(rounds=8000).hash(password)
+    
+    def verify_password(self, password: str, hash: str) -> bool:
+        return sha256_crypt.verify(password, hash)

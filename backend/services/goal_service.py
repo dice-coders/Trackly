@@ -1,7 +1,7 @@
 from repository.goal_repository import GoalRepository
-
 from schemas.goal_schemas import (GoalCreate, GoalUpdate, GoalResponse)
 from models.goal_model import Goal
+from typing import List
 
 class GoalService :
     def __init__(self, repo: GoalRepository) :
@@ -14,16 +14,15 @@ class GoalService :
 
     def get_goal(self, id: int) -> Goal:
         self.id_checker(id)
-        return self.get_goal(id)
+        return self.repo.get_goal(id)
 
-    def list_goals(self):
-        goals = self.list_goals()
-        return [GoalResponse.model_validate(g) for g in goals]
+    def list_goals(self) -> List[Goal]:
+        return self.repo.list_goals()
 
     def update_goal(self, id: int, schema: GoalUpdate) -> Goal:
         self.id_checker(id)
-            
-        goal = self.goal_update_to_model(schema)
+            #Implementar validação de atributos nulos
+        goal = self.goal_update_to_model(id, schema)
         updated = self.repo.update_goal(goal)
         return updated
 
@@ -49,18 +48,14 @@ class GoalService :
         )
         return goal
 
-    def goal_update_to_model(self, schema: GoalUpdate) -> Goal:
+    def goal_update_to_model(self, id: int, schema: GoalUpdate) -> Goal:
         goal = Goal(
             title = schema.title,
             description = schema.description,
-            state = schema.state
+            state = schema.state,
+            id = id
         )
         return goal
-
-    def object_not_null(goal: Goal) :
-        if goal is not None :
-            return goal
-        #raise a global exception handler
 
     def field_not_none_validate(self, id: int, data: GoalResponse) -> Goal:
         
