@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from models.user_model import User
-from sqlalchemy import update
+from sqlalchemy import delete
 from sqlalchemy.orm import Session
 from typing import List
 class UserRepository :
@@ -21,10 +21,13 @@ class UserRepository :
 
     def update_users(self, user: User) -> User:
         updated = self.db.merge(user)
+        self.db.add(updated)
         self.db.commit()
         self.db.refresh(updated)
         return updated
 
     def delete_user(self, id: int) -> None:
-        self.db.delete(User).where(User.id == id)
+        self.db.execute(delete(User).where(User.id == id))
+        self.db.commit()
+        return None
         

@@ -22,6 +22,6 @@ def user_list(service: UserService = Depends(get_user_service)) :
 def user_update(id: int, schema: UserUpdate, service: UserService = Depends(get_user_service)) :
     return service.update_user(id, schema)
 
-@router.delete("/user/{id}")
+@router.delete("/user/{id}", response_model=None, status_code=200)
 def user_delete(id: int, service: UserService = Depends(get_user_service)) :
-    service.delete_user(id)
+    return service.delete_user(id)

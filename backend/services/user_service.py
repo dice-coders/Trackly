@@ -1,7 +1,7 @@
 from repository.user_repository import UserRepository
 from schemas.user_schema import (UserCreate, UserResponse, UserUpdate)
 from models.user_model import User
-
+from passlib.hash import sha256_crypt
 from typing import List
 #Ajustar a injeção de dependencia amanhã
 class UserService :
@@ -13,7 +13,7 @@ class UserService :
         return self.repo.create_user(user)
     
     def get_user(self, id: int) -> User :
-        return self.repo.get_user_by_id(id)
+        return self.repo.get_user(id)
     
     def list_user(self) -> List[User] :
         return self.repo.list_user()
@@ -22,7 +22,7 @@ class UserService :
         return self.field_not_none_validate(id, schema)
     
     def delete_user(self, id: int) -> None :
-        self.repo.delete_user(id)
+        return self.repo.delete_user(id)
 
 
     def parse_user_create(self, schema: UserCreate) -> User :
@@ -32,7 +32,7 @@ class UserService :
             number = schema.number,
             address = schema.address,
             role = schema.role,
-            #hash
+            hash = self.hashing(schema.password)
         )
         return user
     def parse_user_update(self,id: int, schema: UserUpdate) -> User :
@@ -59,8 +59,8 @@ class UserService :
     
     def field_not_none_validate(self, id: int, schema: UserResponse) -> User:
         
-        user = self.repo.get_goal_by_id(id)
-        new_data = self.parse_user_response(id, schema)
+        user = self.repo.get_user(id)
+        new_data = self.parse_user_response(schema)
         
         for field in ["name", "email", "number", "address", "role"]:
             value = getattr(new_data, field)
@@ -68,3 +68,9 @@ class UserService :
             if value is not None:
                 setattr(user, field, value)
         return user
+    
+    def hashing(self, password: str) -> str:
+        return sha256_crypt.using(rounds=8000).hash(password)
+    
+    def verify_password(self, password: str, hash: str) -> bool:
+        return sha256_crypt.verify(password, hash)
