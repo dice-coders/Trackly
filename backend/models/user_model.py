@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from database import Base
 from datetime import date
 
+#Define as variações e as constraints do banco de dados (e define o nome)
 class User(Base) :
     __tablename__ = "users"
     

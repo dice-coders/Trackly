@@ -26,7 +26,7 @@ class UserService :
     def delete_user(self, id: int) -> None :
         return self.repo.delete_user(id)
 
-
+    #Transforma schemas em objetos
     def parse_user_create(self, schema: UserCreate) -> User :
         user = User(
             name = schema.name,
@@ -59,6 +59,7 @@ class UserService :
         )
         return user
     
+    #Válida se os campos são nulos
     def field_not_none_validate(self, id: int, schema: UserUpdate) -> User:
         
         user = self.repo.get_user(id)
@@ -71,8 +72,10 @@ class UserService :
                 setattr(user, field, value)
         return user
     
+    #Criptograda uma variavel
     def hashing(self, password: str) -> str:
         return sha256_crypt.using(rounds=8000).hash(password)
     
+    #Verifica uma variavel por meio de comparação
     def verify_password(self, password: str, hash: str) -> bool:
         return sha256_crypt.verify(password, hash)

@@ -9,6 +9,7 @@ class LeadService :
         lead = self.parse_receive_lead(schema)
         return self.repo.lead_add(lead)
     
+    #Transforma o schema em objeto
     def parse_receive_lead(self, schema: LeadReceive) -> Lead:
         lead = Lead(
             genre = schema.genre,
