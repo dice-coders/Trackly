@@ -8,6 +8,7 @@ class UserService :
     def __init__(self, repo: UserRepository) :
         self.repo = repo        
        
+       
     def save_user(self, schema: UserCreate) -> User :
         user = self.parse_user_create(schema)
         return self.repo.create_user(user)
@@ -19,7 +20,8 @@ class UserService :
         return self.repo.list_user()
     
     def update_user(self,id: int, schema: UserUpdate) -> User :
-        return self.field_not_none_validate(id, schema)
+        user = self.field_not_none_validate(id, schema)
+        return self.repo.update_users(user)
     
     def delete_user(self, id: int) -> None :
         return self.repo.delete_user(id)
@@ -35,18 +37,18 @@ class UserService :
             hash = self.hashing(schema.password)
         )
         return user
-    def parse_user_update(self,id: int, schema: UserUpdate) -> User :
+    def parse_user_update(self, id: int, schema: UserUpdate) -> User :
         user = User(
             name = schema.name,
             email = schema.email,
             number = schema.number,
             address = schema.address,
             role = schema.role,
-            id = id
-            #hash
+            id = id,
+            hash = self.hashing(schema.password)
         )
         return user
-    def parse_user_response(self, schema: UserResponse) -> User :
+    def parse_user_response(self, id:int, schema: UserResponse) -> User :
         user = User(
             name = schema.name,
             email = schema.email,
@@ -57,10 +59,10 @@ class UserService :
         )
         return user
     
-    def field_not_none_validate(self, id: int, schema: UserResponse) -> User:
+    def field_not_none_validate(self, id: int, schema: UserUpdate) -> User:
         
         user = self.repo.get_user(id)
-        new_data = self.parse_user_response(schema)
+        new_data = self.parse_user_update(id, schema)
         
         for field in ["name", "email", "number", "address", "role"]:
             value = getattr(new_data, field)
