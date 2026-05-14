@@ -7,6 +7,7 @@ class GoalService :
     def __init__(self, repo: GoalRepository) :
         self.repo = repo
         
+        
     def create_goal(self, schema: GoalCreate) -> Goal:
         goal = self.goal_create_to_model(schema)
         
@@ -31,7 +32,7 @@ class GoalService :
         self.repo.delete_goal(id)
 
 
-
+#Transformam schemas em objetos
     def goal_create_to_model(self, schema: GoalCreate) -> Goal:
         goal = Goal(
             title = schema.title,
@@ -57,6 +58,7 @@ class GoalService :
         )
         return goal
 
+#Valida campos do objeto e atualiza se o schema recebido não for None
     def field_not_none_validate(self, id: int, data: GoalResponse) -> Goal:
         
         goal = self.repo.get_goal_by_id(id)
@@ -69,6 +71,7 @@ class GoalService :
                 setattr(goal, field, value)
         return goal
 
+#Valida se o id não é None
     def id_checker(self, id: int) :
         if id is not None :
             return id

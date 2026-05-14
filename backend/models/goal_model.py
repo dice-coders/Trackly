@@ -3,6 +3,7 @@ from sqlalchemy import String, Text
 
 from database import Base
 
+#Define as variações e as constraints do banco de dados (e define o nome)
 class Goal(Base) :
     __tablename__ = "goals"
     
