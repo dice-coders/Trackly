@@ -1,6 +1,7 @@
 from database import Base
 from sqlalchemy.orm import Mapped, mapped_column
 
+#Define as variações e as constraints do banco de dados (e define o nome)
 class Lead(Base) :
     __tablename__ = "leads"
     
