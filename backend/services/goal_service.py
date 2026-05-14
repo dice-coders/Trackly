@@ -7,6 +7,7 @@ class GoalService :
     def __init__(self, repo: GoalRepository) :
         self.repo = repo
         
+        
     def create_goal(self, schema: GoalCreate) -> Goal:
         goal = self.goal_create_to_model(schema)
         
