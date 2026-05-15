@@ -4,7 +4,7 @@ from dependencies import get_user_service
 from services.user_service import UserService
 from services.user_service import (UserService)
 from schemas.user_schema import UserCreate, UserResponse, UserUpdate
-router = APIRouter()
+router = APIRouter(prefix="/user", tags=["User defs"])
 
 @router.post("/user", response_model=UserResponse, status_code=201)
 def user_create(schema: UserCreate, service: UserService = Depends(get_user_service)) :

@@ -3,6 +3,7 @@ from routers.goal_router import router as goal_router
 from routers.user_router import router as user_router
 from routers.lead_router import router as lead_router
 from routers.dashboard_router import router as dashboard_router
+from routers.chat_router import router as chat_router
 from database import Base, engine
 
 Base.metadata.create_all(bind=engine)
@@ -13,3 +14,4 @@ app.include_router(goal_router)
 app.include_router(user_router)
 app.include_router(lead_router)
 app.include_router(dashboard_router)
+app.include_router(chat_router)

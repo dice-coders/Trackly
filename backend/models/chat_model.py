@@ -8,4 +8,4 @@ class ChatHistory(Base) :
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     prompt: Mapped[str] = mapped_column(Text)
     message: Mapped[str] = mapped_column(Text)
-    date_requisition: Mapped[date] = mapped_column(default=date.now)
+    date_requisition: Mapped[date] = mapped_column(default=date.today)
