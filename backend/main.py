@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routers.goal_router import router as goal_router
 from routers.user_router import router as user_router
 from routers.lead_router import router as lead_router
@@ -15,3 +16,10 @@ app.include_router(user_router)
 app.include_router(lead_router)
 app.include_router(dashboard_router)
 app.include_router(chat_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Em produção, coloque o domínio real
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
