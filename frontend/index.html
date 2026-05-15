@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Trackly - Vue.js</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center font-sans">
+
+    <div id="app">
+        <main>
+            <div class="flex text-white justify-center flex-wrap flex-col gap-4">
+                <h1 class="uppercase text-lg text-center font-bold tracking-widest">
+                    Simulador de envio
+                </h1>
+                
+                <button 
+                    @click="dispararEnvio"
+                    :disabled="carregando"
+                    class="btn border bg-white text-black px-6 py-2 transition-all hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <span v-if="!carregando">Enviar</span>
+                    <span v-else>Enviando...</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+
+        createApp({
+            setup() {
+                // Estado reativo
+                const carregando = ref(false);
+
+                // Lógica de geração de dados
+                const gerarLead = () => {
+                    const generos = ["Masculino", "Feminino"];
+                    return {
+                        genre: generos[Math.floor(Math.random() * generos.length)],
+                        age: Math.floor(Math.random() * 101),
+                        height: Math.floor(Math.random() * (210 - 100 + 1)) + 100
+                    };
+                };
+
+                // Função de envio
+                const dispararEnvio = async () => {
+                    carregando.value = true;
+                    const payload = gerarLead();
+
+                    try {
+                        const response = await fetch("http://127.0.0.1:8000/lead/leads", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (response.ok) {
+                            console.log("✅ Lead enviado com sucesso:", payload);
+                        } else {
+                            alert("Erro no servidor: " + response.status);
+                        }
+                    } catch (error) {
+                        console.error("Erro de conexão:", error);
+                        alert("Erro: O seu FastAPI está rodando em http://localhost:8000?");
+                    } finally {
+                        carregando.value = false;
+                    }
+                };
+
+                // Retornamos tudo que o HTML (template) precisa acessar
+                return {
+                    carregando,
+                    dispararEnvio
+                };
+            }
+        }).mount('#app'); // Monta a aplicação na div com id="app"
+    </script>
+
+    <style>
+        .btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</body>
+</html>
