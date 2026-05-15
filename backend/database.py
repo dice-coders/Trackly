@@ -1,12 +1,15 @@
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from sqlalchemy import create_engine 
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class Base(DeclarativeBase) :
     pass
 
-DATABASE_URL = "sqlite:///./trackly.db"
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+
+engine = create_engine(os.getenv("DATABASE_URL"))
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db() :
