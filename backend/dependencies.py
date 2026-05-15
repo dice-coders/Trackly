@@ -11,7 +11,8 @@ from services.goal_service import GoalService
 from services.lead_service import LeadService
 from services.dashboard_service import DashboardService
 from services.chat_history_service import ChatHistoryService
-
+from services.gpt_service import GptService
+from services.gpt_service import GptService
 def get_user_repository(db: Session = Depends(get_db)) :
     return UserRepository(db)
 def get_goal_repository(db: Session = Depends(get_db)) :
@@ -31,5 +32,7 @@ def get_lead_service(repo: LeadRepository = Depends(get_lead_repository)) :
     return LeadService(repo)
 def get_dashboard_service(repo: DashboardRepository = Depends(get_dashboard_repository)) :
     return DashboardService(repo)
-def get_chat_history_service(repo: ChatHistoryRepository = Depends(get_chat_history_repository)) :
-    return ChatHistoryService(repo)
+def get_gpt_service(dashboard: DashboardRepository = Depends(get_dashboard_service)) :
+    return GptService(dashboard)
+def get_chat_history_service(gpt: GptService = Depends(get_gpt_service), repo: ChatHistoryRepository = Depends(get_chat_history_repository)) :
+    return ChatHistoryService(repo, gpt)

@@ -2,6 +2,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 from models.goal_model import Goal
 from typing import List
+
 class GoalRepository :
     def __init__(self, db: Session) :
         self.db = db
