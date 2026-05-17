@@ -6,6 +6,6 @@ from services.chat_history_service import ChatHistoryService
 
 router = APIRouter(prefix="/chat", tags=["Chat defs"])
 
-@router.post("/")
+@router.post("/", response_model=ChatResponse, status_code=200)
 def create_requisition(prompt: str, service: ChatHistoryService = Depends(get_chat_history_service)) :
     return service.flow(prompt)
