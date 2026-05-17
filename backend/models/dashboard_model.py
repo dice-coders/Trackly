@@ -10,4 +10,4 @@ class Data(Base):
     genre: Mapped[str] = mapped_column()
     age: Mapped[int] = mapped_column()
     height: Mapped[int] = mapped_column()
-    date_creation: Mapped[date] = mapped_column(default=date.now)
+    date_creation: Mapped[date] = mapped_column(default=date.today)

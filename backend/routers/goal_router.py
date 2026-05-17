@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from schemas.goal_schemas import (GoalCreate, GoalUpdate, GoalResponse)
 router = APIRouter(prefix="/goal", tags=["Goal defs"])
 
-@router.post("/goal/{JSON}", response_model=GoalResponse, status_code=201)
+@router.post("/goal", response_model=GoalResponse, status_code=201)
 def create_goal(schema: GoalCreate, service: GoalService = Depends(get_goal_service)) :
     return service.create_goal(schema)
 

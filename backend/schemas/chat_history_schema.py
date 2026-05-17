@@ -5,5 +5,5 @@ class ChatReceive(BaseModel) :
     model_config = ConfigDict(from_attributes=True)
     
 class ChatResponse(BaseModel) :
-    response: str
+    message: str
     model_config = ConfigDict(from_attributes=True)
