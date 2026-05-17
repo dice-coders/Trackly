@@ -16,7 +16,7 @@ class UserService :
     def get_user(self, id: int) -> User :
         return self.repo.get_user(id)
     
-    def get_user_by_email(email: str) :
+    def get_user_by_email(self, email: str) :
         return self.repo.get_user_by_email(email)
     
     def list_user(self) -> List[User] :
