@@ -16,4 +16,8 @@ class ChatHistoryService :
         return chat
     
     def get_response(self, prompt: str) -> ChatHistory:
-        return self.gpt.bot_response(prompt)
+        history = self.get_history()
+        return self.gpt.bot_response(prompt, history)
+    
+    def get_history(self) -> dict :
+        return self.repo.get_history()

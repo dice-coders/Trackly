@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Session
 from repository.dashboard_repository import DashboardRepository
 
 class DashboardService :
@@ -16,4 +15,20 @@ class DashboardService :
                 {"genre": row[0] or "undefined", "count": row[1]}
                 for row in self.repo.get_leads_by_genre()
             ],
+            "lead_by_height": [
+                {"height": row}
+                for row in self.repo.get_leads_by_height()
+            ]
         }
+        
+    def get_lead_data(self) -> dict :
+        return {
+            "lead": [
+                {
+                    "genre": lead.genre,
+                    "age": lead.age,
+                    "height": lead.height
+                }
+                for lead in self.repo.get_all_leads()
+                    ]
+                }
