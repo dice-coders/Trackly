@@ -10,9 +10,12 @@ class GptService:
         self.gpt = OpenAI(api_key=os.getenv("API_KEY"), base_url=os.getenv("BASE_URL"))
         self.service = service
         
-    def bot_response(self, prompt: str) -> ChatHistory:
+        
+    def bot_response(self, prompt: str, history: list = []) -> ChatHistory:
         contexto = f"""
-        dados para analise : {json.dumps(self.service.get_dashboard(), ensure_ascii=False, indent=2)}.
+        dados filtrados para analise : {json.dumps(self.service.get_dashboard(), ensure_ascii=False, indent=2)}.
+        leads brutos : {json.dumps(self.service.get_lead_data(), ensure_ascii=False, indent=2)}
+        historico de conversa: {json.dumps(history, ensure_ascii=False, indent=2)}
         Pergunta do usuário : {prompt}.
         """
 
