@@ -17,7 +17,7 @@ class GoalService :
         self.id_checker(id)
         return self.repo.get_goal(id)
 
-    def list_goals(self) -> List[Goal]:
+    def list_goals(self) -> list:
         return self.repo.list_goals()
 
     def update_goal(self, id: int, schema: GoalUpdate) -> Goal:

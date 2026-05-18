@@ -32,7 +32,7 @@ def get_lead_service(repo: LeadRepository = Depends(get_lead_repository)) :
     return LeadService(repo)
 def get_dashboard_service(repo: DashboardRepository = Depends(get_dashboard_repository)) :
     return DashboardService(repo)
-def get_gpt_service(dashboard: DashboardRepository = Depends(get_dashboard_service)) :
-    return GptService(dashboard)
+def get_gpt_service(dashboard: DashboardRepository = Depends(get_dashboard_service), goals: GoalService = Depends(get_goal_service)) :
+    return GptService(dashboard, goals)
 def get_chat_history_service(gpt: GptService = Depends(get_gpt_service), repo: ChatHistoryRepository = Depends(get_chat_history_repository)) :
     return ChatHistoryService(repo, gpt)
